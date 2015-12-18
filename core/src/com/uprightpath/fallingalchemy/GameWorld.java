@@ -1,7 +1,7 @@
 package com.uprightpath.fallingalchemy;
 
 import com.badlogic.gdx.utils.IntMap;
-import com.uprightpath.fallingalchemy.physics.PhysicsWorld;
+import com.uprightpath.fallingalchemy.physics.world.PhysicsWorld;
 
 /**
  * Created by Geo on 9/2/2014.

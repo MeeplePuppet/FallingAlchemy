@@ -1,0 +1,80 @@
+package com.uprightpath.fallingalchemy.physics.rendering;
+
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Camera;
+import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.math.Vector3;
+import com.uprightpath.fallingalchemy.physics.world.PhysicsWorld;
+
+/**
+ * Created by Geo on 8/27/2014.
+ */
+public class WorldRenderer {
+    private ShapeRenderer shapeRenderer;
+    private Vector2 position = new Vector2();
+    private Camera camera;
+
+
+    public WorldRenderer() {
+        this.shapeRenderer = new ShapeRenderer();
+        this.camera = new OrthographicCamera(((float) Gdx.graphics.getWidth() / (float) Gdx.graphics.getHeight()) * 10, 10);
+        this.camera.translate(0, 0, 10);
+        this.camera.lookAt(0, 0, 0);
+    }
+
+    public void render(float delta, PhysicsWorld physicsWorld) {
+        physicsWorld.getFollowingAgent();
+        physicsWorld.getFollowingAgent().getCollisionPolygon();
+        physicsWorld.getFollowingAgent().getCollisionPolygon().getBoundingRectangle();
+        physicsWorld.getFollowingAgent().getCollisionPolygon().getBoundingRectangle().getCenter(position);
+        Vector3 previous = new Vector3(camera.position);
+        camera.position.set(position.x, position.y, 10);
+        previous.sub(camera.position);
+        camera.update();
+        Gdx.gl.glLineWidth(1);
+        shapeRenderer.setProjectionMatrix(camera.combined);
+        shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
+        shapeRenderer.setColor(0, 1, 0, 1);
+        for (int i = 0; i < physicsWorld.getCollisions().size; i++) {
+            shapeRenderer.polygon(physicsWorld.getCollisions().get(i).getCollisionPolygon().getTransformedVertices());
+        }
+        shapeRenderer.setColor(1, 0, 1, 1);
+        for (int i = 0; i < physicsWorld.getTouchables().size; i++) {
+            shapeRenderer.polygon(physicsWorld.getTouchables().get(i).getCollisionPolygon().getTransformedVertices());
+        }
+
+        for (int i = 0; i < physicsWorld.getPlatforms().size; i++) {
+            if (physicsWorld.getPlatforms().get(i).isCollides()) {
+                shapeRenderer.setColor(0, 1, 0, 1);
+                shapeRenderer.polygon(physicsWorld.getPlatforms().get(i).getCollisionPolygon().getTransformedVertices());
+            }
+            shapeRenderer.setColor(0, .5f, 0, 1);
+            shapeRenderer.polygon(physicsWorld.getPlatforms().get(i).getPlatformCollisionPolygon().getTransformedVertices());
+        }
+        for (int i = 0; i < physicsWorld.getLadders().size; i++) {
+            shapeRenderer.setColor(.5f, .5f, 0, 1);
+            shapeRenderer.polygon(physicsWorld.getLadders().get(i).getCollisionPolygon().getTransformedVertices());
+        }
+        for (int i = 0; i < physicsWorld.getAgents().size; i++) {
+            if (physicsWorld.getAgents().get(i).getRail() == null) {
+                shapeRenderer.setColor(0, 0, 1, 1);
+            } else {
+                shapeRenderer.setColor(0, 1, 1, 1);
+            }
+            shapeRenderer.polygon(physicsWorld.getAgents().get(i).getCollisionPolygon().getTransformedVertices());
+            shapeRenderer.setColor(0, 1, 1, 1);
+            shapeRenderer.polygon(physicsWorld.getAgents().get(i).getPlatformCollisionPolygon().getTransformedVertices());
+        }
+        shapeRenderer.end();
+    }
+
+    public void updateCamera(Vector3 update) {
+        camera.position.add(update);
+    }
+
+    public void dispose() {
+        this.shapeRenderer.dispose();
+    }
+}

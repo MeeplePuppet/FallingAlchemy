@@ -6,16 +6,15 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.math.Polygon;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
-import com.uprightpath.fallingalchemy.agentstats.AgentStats;
-import com.uprightpath.fallingalchemy.builders.WorldBuilder;
+import com.uprightpath.fallingalchemy.physics.builders.WorldBuilder;
 import com.uprightpath.fallingalchemy.controls.Control;
 import com.uprightpath.fallingalchemy.controls.KeyboardControlSource;
-import com.uprightpath.fallingalchemy.physics.PhysicsWorld;
-import com.uprightpath.fallingalchemy.agentintelligence.player.PlayerAgent;
-import com.uprightpath.fallingalchemy.rendering.WorldRenderer;
+import com.uprightpath.fallingalchemy.physics.world.PhysicsWorld;
+import com.uprightpath.fallingalchemy.physics.intelligence.player.PlayerAgent;
+import com.uprightpath.fallingalchemy.physics.rendering.WorldRenderer;
 
 public class FallingAlchemy extends ApplicationAdapter {
 	private SpriteBatch batch;
@@ -33,11 +32,12 @@ public class FallingAlchemy extends ApplicationAdapter {
 		font = new BitmapFont();
 		physicsWorld = new PhysicsWorld();
 		playerAgent = new PlayerAgent();
+		playerAgent.setPolygons(new Polygon(new float[]{0.f, 1.8f, 0.f, 0.f, .8f, 0.f, .8f, 1.8f}),new Polygon(new float[]{0f, 0f, 0.f, -.1f, .8f, -.1f, .8f, 0f}));
 
-		AgentStats stats = new AgentStats() {};
-		stats.setMaxHealth(10);
-		stats.setCurrentHealth(10);
-		playerAgent.setAgentStats(stats);
+		//AgentStats stats = new AgentStats() {};
+		//stats.setMaxHealth(10);
+		//stats.setCurrentHealth(10);
+		//playerAgent.setAgentStats(stats);
 		worldRenderer = new WorldRenderer();
 		Control.setControlSource(new KeyboardControlSource());
 		physicsWorld.setFollowingAgent(playerAgent);
@@ -65,7 +65,7 @@ public class FallingAlchemy extends ApplicationAdapter {
 		worldBuilder.buildSurface("MC's House; Front Yard", physicsWorld, new Vector3[]{new Vector3(44, 4f, 4f), new Vector3(55, 4f, 4f)}, true);
 		worldBuilder.buildSurface("Left Ford; Step 2", physicsWorld, new Vector3[]{new Vector3(55, 3f, 3f), new Vector3(56, 3f, 3f)}, true);
 		worldBuilder.buildSurface("Left Ford; Step 1", physicsWorld, new Vector3[]{new Vector3(56, 2f, 2f), new Vector3(57, 2f, 2f)}, true);
-		worldBuilder.buildSurface("Ford Road & Bridge", physicsWorld, new Vector3[]{new Vector3(57, 1f, 1f), new Vector3(62, 1f, 1f), new Vector3(64, 2f, 2f), new Vector3(68, 3f, 3f), new Vector3(72, 2f, 2f), new Vector3(74, 1f, 1f), new Vector3(79, 1f, 1f)}, true, .05f);
+		worldBuilder.buildSurface("Ford Road & Bridge", physicsWorld, new Vector3[]{new Vector3(57, 1f, 1f), new Vector3(62, 1f, 1f), new Vector3(64, 2f, 2f), new Vector3(68, 3f, 3f), new Vector3(72, 2f, 2f), new Vector3(74, 1f, 1f), new Vector3(79, 1f, 1f)}, true, .00f);
 		worldBuilder.buildSurface("Right Ford; Step 1", physicsWorld, new Vector3[]{new Vector3(79, 2f, 2f), new Vector3(80, 2f, 2f)}, true);
 		worldBuilder.buildSurface("Right Ford; Step 2", physicsWorld, new Vector3[]{new Vector3(80, 3f, 3f), new Vector3(81, 3f, 3f)}, true);
 		worldBuilder.buildSurface("School Yard", physicsWorld, new Vector3[]{new Vector3(81, 4f, 4f), new Vector3(106, 4f, 4f)}, true);
@@ -79,6 +79,8 @@ public class FallingAlchemy extends ApplicationAdapter {
 		worldBuilder.buildStairs("Wall Tower; Third Floor Stair", physicsWorld, new Vector3[]{new Vector3(2, 13, .5f), new Vector3(5, 10, .5f)});
 		worldBuilder.buildSurface("Wall Tower; Fourth Floor", physicsWorld, new Vector3[]{new Vector3(1, 13, .5f), new Vector3(1.5f, 13, .5f), new Vector3(5.5f, 13, .5f), new Vector3(6, 13, .5f)}, false);
 		worldBuilder.buildPlatform("MC's House; Second Floor", physicsWorld, new Vector3[]{new Vector3(35, 8, .5f), new Vector3(42, 8, .5f)});
+
+		worldBuilder.buildPlatform("MC's House; Second Floor", physicsWorld, new Vector3[]{new Vector3(46, 8, .5f), new Vector3(48, 8, .5f)});
 
 		// Walls
 		worldBuilder.buildWall("Wall Tower; Left Wall", physicsWorld, new Vector2(0, 0), new Vector2(1, 20));
@@ -95,7 +97,7 @@ public class FallingAlchemy extends ApplicationAdapter {
 		worldBuilder.buildLadder("MC's House; Ladder", physicsWorld, new Vector2[]{new Vector2(37.5f, 4.5f), new Vector2(37.5f, 8)});
 
 		for (int i = 0; i < 10; i++) {
-			worldBuilder.buildStupidSlime("Slime " + i, physicsWorld, new Vector2(MathUtils.random(7f, 107f), 19));
+			//worldBuilder.buildStupidSlime("Slime " + i, physicsWorld, new Vector2(MathUtils.random(7f, 107f), 19));
 		}
 	}
 

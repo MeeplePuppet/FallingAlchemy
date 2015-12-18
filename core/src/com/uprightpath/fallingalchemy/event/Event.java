@@ -1,6 +1,6 @@
 package com.uprightpath.fallingalchemy.event;
 
-import com.uprightpath.fallingalchemy.physics.PhysicsWorld;
+import com.uprightpath.fallingalchemy.physics.world.PhysicsWorld;
 
 /**
  * Something that occurs that typically triggers other things within the world. These are
